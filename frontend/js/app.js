@@ -175,7 +175,12 @@ function FreshCartApp() {
   const handleCheckoutSubmit = async (customerData) => {
     try {
       const orderPayload = {
-        customer: customerData,
+        customer: {
+          name: customerData.name || currentUser?.name || 'Customer',
+          phone: customerData.phone || currentUser?.phone || '9876543210',
+          email: customerData.email || currentUser?.email || 'customer@freshcart.com',
+          address: customerData.address
+        },
         paymentMethod: customerData.paymentMethod || 'COD',
         items: cartList.map(item => ({
           productId: item.product.id || item.product._id,
@@ -218,6 +223,16 @@ function FreshCartApp() {
       }
     } catch (err) {
       alert(`Status update failed: ${err.message}`);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId, orderNumber) => {
+    if (!window.confirm(`Delete order ${orderNumber} from database?`)) return;
+    try {
+      await window.FreshCartAPI.deleteOrder(orderId);
+      loadAdminData();
+    } catch (err) {
+      alert(`Delete failed: ${err.message}`);
     }
   };
 
@@ -721,26 +736,35 @@ function FreshCartApp() {
 
             {/* Customer Orders Table */}
             <div className="section-header" style={{ marginTop: '2rem' }}>
-              <h3 className="section-title">📋 Customer Orders Management</h3>
+              <div>
+                <h3 className="section-title">📋 Customer Orders Management</h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>View real-time customer orders from MongoDB, update delivery status, or remove test orders.</p>
+              </div>
             </div>
             <div className="table-wrapper">
               <table className="custom-table">
                 <thead>
                   <tr>
                     <th>Order #</th>
-                    <th>Customer</th>
+                    <th>Customer Name & Account</th>
                     <th>Items</th>
                     <th>Total (INR)</th>
                     <th>Payment</th>
                     <th>Status</th>
                     <th>Update Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {allOrders.map(ord => (
                     <tr key={ord.id || ord._id}>
                       <td><strong>{ord.orderNumber}</strong></td>
-                      <td>{ord.customer?.name} ({ord.customer?.phone})</td>
+                      <td>
+                        <strong>{ord.customer?.name}</strong>
+                        <div style={{ color: '#64748b', fontSize: '0.8rem' }}>
+                          {ord.customer?.email || ord.customer?.phone}
+                        </div>
+                      </td>
                       <td>{ord.items?.length} items</td>
                       <td><strong>₹{ord.totalAmount}</strong></td>
                       <td>{ord.paymentMethod} ({ord.paymentStatus})</td>
@@ -760,6 +784,16 @@ function FreshCartApp() {
                           <option value="Delivered">Delivered</option>
                           <option value="Cancelled">Cancelled</option>
                         </select>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-danger"
+                          style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
+                          title="Delete test order"
+                          onClick={() => handleDeleteOrder(ord.id || ord._id, ord.orderNumber)}
+                        >
+                          🗑️ Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -847,6 +881,7 @@ function FreshCartApp() {
       {/* Checkout Modal */}
       {isCheckoutOpen && (
         <CheckoutModal
+          currentUser={currentUser}
           onClose={() => setIsCheckoutOpen(false)}
           onSubmit={handleCheckoutSubmit}
           totalAmount={grandTotal}
@@ -876,13 +911,20 @@ function FreshCartApp() {
 }
 
 // Checkout Modal Subcomponent
-function CheckoutModal({ onClose, onSubmit, totalAmount }) {
-  const [name, setName] = useState('Yashas');
-  const [phone, setPhone] = useState('9876543210');
+function CheckoutModal({ currentUser, onClose, onSubmit, totalAmount }) {
+  const [name, setName] = useState(currentUser?.name || '');
+  const [phone, setPhone] = useState(currentUser?.phone || '');
   const [street, setStreet] = useState('RV College of Engineering, Mysuru Road');
   const [city, setCity] = useState('Bengaluru');
   const [pincode, setPincode] = useState('560059');
   const [paymentMethod, setPaymentMethod] = useState('COD');
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.name) setName(currentUser.name);
+      if (currentUser.phone) setPhone(currentUser.phone);
+    }
+  }, [currentUser]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -893,6 +935,7 @@ function CheckoutModal({ onClose, onSubmit, totalAmount }) {
     onSubmit({
       name,
       phone,
+      email: currentUser?.email || 'customer@freshcart.com',
       address: { street, city, pincode },
       paymentMethod
     });

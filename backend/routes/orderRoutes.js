@@ -9,7 +9,8 @@ const {
   createOrder,
   getOrders,
   getOrderByIdOrNumber,
-  updateOrderStatus
+  updateOrderStatus,
+  deleteOrder
 } = require('../controllers/orderController');
 
 router.route('/')
@@ -17,7 +18,8 @@ router.route('/')
   .post(createOrder);
 
 router.route('/:idOrNumber')
-  .get(getOrderByIdOrNumber);
+  .get(getOrderByIdOrNumber)
+  .delete(deleteOrder);
 
 router.route('/:id/status')
   .patch(updateOrderStatus);

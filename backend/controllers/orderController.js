@@ -280,3 +280,26 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+
+// @desc    Delete order (Admin)
+// @route   DELETE /api/orders/:id
+// @access  Admin
+exports.deleteOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (isMongo() && Order) {
+      await Order.findOneAndDelete({
+        $or: [{ _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }, { orderNumber: id }]
+      });
+      return res.status(200).json({ success: true, message: 'Order removed' });
+    }
+
+    store.data.orders = store.data.orders.filter(
+      o => o.id !== id && o._id !== id && o.orderNumber !== id
+    );
+    store.persist();
+    res.status(200).json({ success: true, message: 'Order removed' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

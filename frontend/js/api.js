@@ -96,6 +96,15 @@ const api = {
     return data.data;
   },
 
+  async deleteOrder(orderId) {
+    const res = await fetch(`${API_BASE}/orders/${orderId}`, {
+      method: 'DELETE'
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to delete order');
+    return data;
+  },
+
   // Inventory API
   async getInventoryStats() {
     const res = await fetch(`${API_BASE}/inventory/stats`);

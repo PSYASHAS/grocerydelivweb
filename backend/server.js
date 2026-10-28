@@ -173,6 +173,9 @@ const createFallbackServer = () => {
     if (orderIdMatch && method === 'GET') {
       return orderController.getOrderByIdOrNumber({ params: { idOrNumber: orderIdMatch[1] } }, mockRes);
     }
+    if (orderIdMatch && method === 'DELETE') {
+      return orderController.deleteOrder({ params: { id: orderIdMatch[1] } }, mockRes);
+    }
 
     // Product Routes
     if (pathname === '/api/products' && method === 'GET') {
