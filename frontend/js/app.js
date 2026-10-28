@@ -87,7 +87,7 @@ function FreshCartApp() {
         category: selectedCategory,
         search: searchQuery
       });
-      setProducts(data);
+      setProducts(Array.isArray(data) ? data : (data && Array.isArray(data.data) ? data.data : []));
     } catch (err) {
       console.error('Error fetching products:', err);
     } finally {

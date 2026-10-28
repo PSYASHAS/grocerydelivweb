@@ -308,6 +308,24 @@ const createFallbackServer = () => {
 const startServer = async () => {
   await connectDB();
 
+  // Auto-seed initial catalog into MongoDB if empty
+  if (isMongo()) {
+    try {
+      const Product = require('./models/Product');
+      const count = await Product.countDocuments();
+      if (count === 0) {
+        console.log('[DB] Products collection empty. Auto-seeding initial grocery items...');
+        const sampleProducts = JSON.parse(
+          fs.readFileSync(path.join(__dirname, 'data', 'sampleProducts.json'), 'utf8')
+        );
+        await Product.insertMany(sampleProducts);
+        console.log(`[DB] -> Successfully seeded ${sampleProducts.length} grocery items into MongoDB!`);
+      }
+    } catch (e) {
+      console.error('[DB] Auto-seed check error:', e.message);
+    }
+  }
+
   const server = expressLoaded ? app : createFallbackServer();
 
   server.listen(PORT, () => {
