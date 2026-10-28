@@ -1,0 +1,222 @@
+{
+  "info": {
+    "_postman_id": "a9182374-9c8f-4d32-8491-freshcart001",
+    "name": "FreshCart Grocery Delivery REST API",
+    "description": "Postman API Collection for RVCE CSE Skill Lab - Day 3 REST API & Day 5 Capstone",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Filter by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products?category=Dairy & Breakfast",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "category", "value": "Dairy & Breakfast" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Grocery Catalog",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products?search=Tomatoes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "search", "value": "Tomatoes" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/prod_001",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "prod_001"]
+            }
+          }
+        },
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fresh Organic Broccoli\",\n  \"category\": \"Fruits & Vegetables\",\n  \"price\": 70,\n  \"discountPrice\": 55,\n  \"stockQuantity\": 25,\n  \"unit\": \"500 g\",\n  \"image\": \"https://images.unsplash.com/photo-1584270354949-c26b0d5b4a0c?w=500\",\n  \"description\": \"Crisp green florets packed with sulforaphane and Vitamin C.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory & Warehouse",
+      "item": [
+        {
+          "name": "Get Inventory Stats & Low Stock Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "stats"]
+            }
+          }
+        },
+        {
+          "name": "Restock Product Stock",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addQuantity\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/inventory/prod_004/restock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "inventory", "prod_004", "restock"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders & Tracking",
+      "item": [
+        {
+          "name": "Create Grocery Order (Deducts Stock)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer\": {\n    \"name\": \"Yashas\",\n    \"phone\": \"9876543210\",\n    \"email\": \"yashas@rvce.edu.in\",\n    \"address\": {\n      \"street\": \"RVCE Campus, Mysuru Road\",\n      \"city\": \"Bengaluru\",\n      \"pincode\": \"560059\"\n    }\n  },\n  \"paymentMethod\": \"UPI\",\n  \"items\": [\n    {\n      \"productId\": \"prod_001\",\n      \"name\": \"Farm Fresh Red Tomatoes\",\n      \"quantity\": 2\n    },\n    {\n      \"productId\": \"prod_006\",\n      \"name\": \"Amul Taaza Fresh Toned Milk\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Track Order by Order Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/FC-102938",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "FC-102938"]
+            }
+          }
+        },
+        {
+          "name": "Update Order Delivery Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Out for Delivery\",\n  \"note\": \"Rider Ramesh departed dark-store on electric bike\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/ord_demo_1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "ord_demo_1", "status"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@freshcart.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "User Registration",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Student Demo\",\n  \"email\": \"student@rvce.edu.in\",\n  \"password\": \"pass123\",\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    }
+  ]
+}
