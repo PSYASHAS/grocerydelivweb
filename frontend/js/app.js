@@ -37,6 +37,10 @@ function FreshCartApp() {
   // Inventory Stats State (for Admin Dashboard)
   const [inventoryStats, setInventoryStats] = useState(null);
 
+  // Product CRUD Modal State
+  const [productModalMode, setProductModalMode] = useState(null); // 'create' | 'edit' | null
+  const [productToEdit, setProductToEdit] = useState(null);
+
   // Sync Cart to LocalStorage
   useEffect(() => {
     try {
@@ -182,6 +186,50 @@ function FreshCartApp() {
       }
     } catch (err) {
       alert(`Status update failed: ${err.message}`);
+    }
+  };
+
+  // Product CRUD Handlers (Admin)
+  const openCreateProductModal = () => {
+    setProductToEdit(null);
+    setProductModalMode('create');
+  };
+
+  const openEditProductModal = (product) => {
+    setProductToEdit(product);
+    setProductModalMode('edit');
+  };
+
+  const handleSaveProduct = async (productData) => {
+    try {
+      if (productModalMode === 'edit') {
+        const id = productToEdit.id || productToEdit._id;
+        await window.FreshCartAPI.updateProduct(id, productData);
+        alert('Product updated successfully!');
+      } else {
+        await window.FreshCartAPI.createProduct(productData);
+        alert('New grocery product added to catalog!');
+      }
+      setProductModalMode(null);
+      setProductToEdit(null);
+      loadProducts();
+      loadAdminData();
+    } catch (err) {
+      alert(`Error saving product: ${err.message}`);
+    }
+  };
+
+  const handleDeleteProduct = async (productId, productName) => {
+    if (!window.confirm(`Are you sure you want to delete "${productName}" from the catalog?`)) {
+      return;
+    }
+    try {
+      await window.FreshCartAPI.deleteProduct(productId);
+      alert(`Successfully removed "${productName}" from inventory.`);
+      loadProducts();
+      loadAdminData();
+    } catch (err) {
+      alert(`Delete failed: ${err.message}`);
     }
   };
 
@@ -454,9 +502,14 @@ function FreshCartApp() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h2>📦 Warehouse Inventory & Order Dispatch</h2>
-                <p style={{ color: '#64748b' }}>Real-time stock deduction, low stock alerts, and order lifecycle management.</p>
+                <p style={{ color: '#64748b' }}>Real-time stock deduction, low stock alerts, and full CRUD grocery item management.</p>
               </div>
-              <span className="admin-badge">ADMIN DASHBOARD</span>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <button className="btn btn-primary" onClick={openCreateProductModal}>
+                  ➕ Add New Grocery Item
+                </button>
+                <span className="admin-badge">ADMIN DASHBOARD</span>
+              </div>
             </div>
 
             {/* KPI Metrics */}
@@ -518,6 +571,84 @@ function FreshCartApp() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Complete Grocery Catalog CRUD Table */}
+            <div className="section-header" style={{ marginTop: '2rem' }}>
+              <div>
+                <h3 className="section-title">🥦 Full Product Catalog (CRUD: Create, Read, Update, Delete)</h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>View, edit prices & stock, or delete items directly from the database.</p>
+              </div>
+              <button className="btn btn-primary" onClick={openCreateProductModal} style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem' }}>
+                + Add Product
+              </button>
+            </div>
+            <div className="table-wrapper">
+              <table className="custom-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Price (INR)</th>
+                    <th>Stock</th>
+                    <th>Unit</th>
+                    <th>Actions (Update / Delete)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(p => {
+                    const pid = p.id || p._id;
+                    return (
+                      <tr key={pid}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <img src={p.image} alt={p.name} style={{ width: '36px', height: '36px', borderRadius: '6px', objectFit: 'cover' }} />
+                            <div>
+                              <strong>{p.name}</strong>
+                              {p.discountPrice && (
+                                <span style={{ marginLeft: '6px', fontSize: '0.75rem', color: '#10b981', fontWeight: 'bold' }}>
+                                  ({Math.round(((p.price - p.discountPrice) / p.price) * 100)}% off)
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td>{p.category}</td>
+                        <td>
+                          <strong>₹{p.discountPrice || p.price}</strong>
+                          {p.discountPrice && <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '0.8rem', marginLeft: '4px' }}>₹{p.price}</span>}
+                        </td>
+                        <td>
+                          <span className={`stock-tag ${p.stockQuantity === 0 ? 'out-of-stock' : p.stockQuantity < 10 ? 'low-stock' : 'in-stock'}`}>
+                            {p.stockQuantity} units
+                          </span>
+                        </td>
+                        <td>{p.unit}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button
+                              className="btn btn-outline"
+                              style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}
+                              title="Edit price, stock, or details"
+                              onClick={() => openEditProductModal(p)}
+                            >
+                              ✏️ Edit
+                            </button>
+                            <button
+                              className="btn btn-danger"
+                              style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}
+                              title="Delete from database"
+                              onClick={() => handleDeleteProduct(pid, p.name)}
+                            >
+                              🗑️ Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -655,6 +786,16 @@ function FreshCartApp() {
           totalAmount={grandTotal}
         />
       )}
+
+      {/* Product Create/Edit CRUD Modal */}
+      {productModalMode && (
+        <ProductModal
+          mode={productModalMode}
+          initialData={productToEdit}
+          onClose={() => { setProductModalMode(null); setProductToEdit(null); }}
+          onSave={handleSaveProduct}
+        />
+      )}
     </div>
   );
 }
@@ -765,6 +906,158 @@ function CheckoutModal({ onClose, onSubmit, totalAmount }) {
             style={{ width: '100%', padding: '0.85rem', marginTop: '1rem', fontSize: '1rem' }}
           >
             Confirm & Place Grocery Order (₹{totalAmount})
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Product Modal Component (CRUD: Create & Update)
+function ProductModal({ mode, initialData, onClose, onSave }) {
+  const [name, setName] = useState(initialData?.name || '');
+  const [category, setCategory] = useState(initialData?.category || 'Fruits & Vegetables');
+  const [price, setPrice] = useState(initialData?.price || '');
+  const [discountPrice, setDiscountPrice] = useState(initialData?.discountPrice || '');
+  const [stockQuantity, setStockQuantity] = useState(initialData?.stockQuantity !== undefined ? initialData.stockQuantity : 20);
+  const [unit, setUnit] = useState(initialData?.unit || '1 kg');
+  const [image, setImage] = useState(initialData?.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=500');
+  const [description, setDescription] = useState(initialData?.description || '');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name || !price || stockQuantity === '') {
+      alert('Please provide product name, price, and stock count');
+      return;
+    }
+
+    onSave({
+      name,
+      category,
+      price: Number(price),
+      discountPrice: discountPrice ? Number(discountPrice) : null,
+      stockQuantity: Number(stockQuantity),
+      unit,
+      image,
+      description
+    });
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <h2>{mode === 'edit' ? '✏️ Edit Grocery Item' : '➕ Add New Grocery Item'}</h2>
+          <button className="close-btn" onClick={onClose}>✕</button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Product Name</label>
+            <input
+              type="text"
+              className="form-input"
+              required
+              placeholder="e.g. Fresh Organic Strawberries"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Category</label>
+              <select
+                className="form-select"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="Fruits & Vegetables">Fruits & Vegetables</option>
+                <option value="Dairy & Breakfast">Dairy & Breakfast</option>
+                <option value="Staples & Grains">Staples & Grains</option>
+                <option value="Snacks & Drinks">Snacks & Drinks</option>
+                <option value="Household & Personal">Household & Personal</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Unit / Packaging</label>
+              <input
+                type="text"
+                className="form-input"
+                required
+                placeholder="e.g. 500 g, 1 kg, 1 Litre"
+                value={unit}
+                onChange={(e) => setUnit(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="form-group">
+              <label className="form-label">Regular Price (₹ INR)</label>
+              <input
+                type="number"
+                min="0"
+                className="form-input"
+                required
+                placeholder="40"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Discount Price (₹ INR, Optional)</label>
+              <input
+                type="number"
+                min="0"
+                className="form-input"
+                placeholder="32"
+                value={discountPrice}
+                onChange={(e) => setDiscountPrice(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Warehouse Stock Quantity</label>
+            <input
+              type="number"
+              min="0"
+              className="form-input"
+              required
+              placeholder="25"
+              value={stockQuantity}
+              onChange={(e) => setStockQuantity(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Image URL</label>
+            <input
+              type="url"
+              className="form-input"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Description</label>
+            <textarea
+              className="form-input"
+              rows="2"
+              placeholder="Product description and freshness details..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ width: '100%', padding: '0.85rem', marginTop: '0.5rem', fontSize: '1rem' }}
+          >
+            {mode === 'edit' ? 'Save Changes' : 'Add Item to Catalog'}
           </button>
         </form>
       </div>

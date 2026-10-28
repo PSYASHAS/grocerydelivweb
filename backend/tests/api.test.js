@@ -76,6 +76,31 @@ async function runTests() {
       'Search query finds "Milk" in product catalog'
     );
 
+    // Test 1.4: CRUD - Create Product (POST)
+    const resCreate = createMockRes();
+    const newProductPayload = {
+      name: 'Test Organic Avocados',
+      category: 'Fruits & Vegetables',
+      price: 120,
+      discountPrice: 99,
+      stockQuantity: 30,
+      unit: '2 pcs',
+      description: 'Test Avocado for CRUD test'
+    };
+    await productController.createProduct({ body: newProductPayload }, resCreate);
+    assert(resCreate.statusCode === 201 && resCreate.body.data.name === 'Test Organic Avocados', 'CRUD [Create]: POST /api/products creates new grocery item');
+
+    // Test 1.5: CRUD - Update Product (PUT)
+    const createdId = resCreate.body.data.id || resCreate.body.data._id;
+    const resUpdate = createMockRes();
+    await productController.updateProduct({ params: { id: createdId }, body: { price: 110, discountPrice: 89 } }, resUpdate);
+    assert(resUpdate.statusCode === 200 && resUpdate.body.data.price === 110, 'CRUD [Update]: PUT /api/products/:id updates price and details');
+
+    // Test 1.6: CRUD - Delete Product (DELETE)
+    const resDelete = createMockRes();
+    await productController.deleteProduct({ params: { id: createdId } }, resDelete);
+    assert(resDelete.statusCode === 200, 'CRUD [Delete]: DELETE /api/products/:id removes item from database');
+
     // Suite 2: Inventory Warehouse Stats & Restocking (Day 3 & Day 4)
     console.log('\n[Suite 2: Inventory Warehouse & Stock Monitoring]');
     

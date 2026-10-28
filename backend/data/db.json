@@ -6,7 +6,7 @@
       "category": "Fruits & Vegetables",
       "price": 40,
       "discountPrice": 32,
-      "stockQuantity": 57,
+      "stockQuantity": 69,
       "unit": "1 kg",
       "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&auto=format&fit=crop&q=60",
       "description": "Locally harvested, plump, and juicy red tomatoes rich in Lycopene and Vitamin C.",
@@ -45,7 +45,7 @@
       "category": "Fruits & Vegetables",
       "price": 60,
       "discountPrice": 48,
-      "stockQuantity": 5,
+      "stockQuantity": 20,
       "unit": "1 dozen (12 pcs)",
       "image": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=500&auto=format&fit=crop&q=60",
       "description": "Naturally ripened sweet bananas, high in potassium and great for pre-workout energy.",
@@ -315,6 +315,50 @@
   ],
   "orders": [
     {
+      "id": "ord_1793164455736",
+      "orderNumber": "FC-325660",
+      "customer": {
+        "name": "Yashas Test Customer",
+        "phone": "9876543210",
+        "email": "yashas@rvce.edu.in",
+        "address": {
+          "street": "RVCE Campus, Mysuru Road",
+          "city": "Bengaluru",
+          "pincode": "560059"
+        }
+      },
+      "items": [
+        {
+          "productId": "prod_001",
+          "name": "Farm Fresh Red Tomatoes",
+          "price": 32,
+          "quantity": 3,
+          "unit": "1 kg",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&auto=format&fit=crop&q=60"
+        }
+      ],
+      "subtotal": 96,
+      "deliveryFee": 40,
+      "totalAmount": 136,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Completed",
+      "orderStatus": "Out for Delivery",
+      "deliveryOtp": "8606",
+      "createdAt": "2026-10-28T05:14:15.736Z",
+      "timeline": [
+        {
+          "status": "Placed",
+          "timestamp": "2026-10-28T05:14:15.736Z",
+          "note": "Order placed. Estimated delivery in 20-30 minutes."
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "2026-10-28T05:14:15.775Z",
+          "note": "Rider Ramesh out on electric scooter"
+        }
+      ]
+    },
+    {
       "id": "ord_1793163278862",
       "orderNumber": "FC-373978",
       "customer": {
@@ -342,7 +386,7 @@
       "totalAmount": 136,
       "paymentMethod": "UPI",
       "paymentStatus": "Completed",
-      "orderStatus": "Out for Delivery",
+      "orderStatus": "Delivered",
       "deliveryOtp": "3083",
       "createdAt": "2026-10-28T04:54:38.862Z",
       "timeline": [
@@ -355,6 +399,11 @@
           "status": "Out for Delivery",
           "timestamp": "2026-10-28T04:54:38.865Z",
           "note": "Rider Ramesh out on electric scooter"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-10-28T05:08:58.109Z",
+          "note": "Order transitioned to Delivered"
         }
       ]
     }

@@ -28,6 +28,37 @@ const api = {
     return data.data;
   },
 
+  async createProduct(productData) {
+    const res = await fetch(`${API_BASE}/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to create product');
+    return data.data;
+  },
+
+  async updateProduct(id, updates) {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to update product');
+    return data.data;
+  },
+
+  async deleteProduct(id) {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: 'DELETE'
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to delete product');
+    return data;
+  },
+
   // Orders API
   async createOrder(orderPayload) {
     const res = await fetch(`${API_BASE}/orders`, {
