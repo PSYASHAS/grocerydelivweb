@@ -41,6 +41,38 @@ function FreshCartApp() {
   const [productModalMode, setProductModalMode] = useState(null); // 'create' | 'edit' | null
   const [productToEdit, setProductToEdit] = useState(null);
 
+  // Authentication State (Login System at Start)
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('freshcart_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(() => {
+    return !localStorage.getItem('freshcart_user');
+  });
+
+  const handleLoginSuccess = (user, token) => {
+    setCurrentUser(user);
+    try {
+      localStorage.setItem('freshcart_user', JSON.stringify(user));
+      if (token) localStorage.setItem('freshcart_token', token);
+    } catch (e) {}
+    setIsAuthModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('freshcart_user');
+      localStorage.removeItem('freshcart_token');
+    } catch (e) {}
+    setIsAuthModalOpen(true);
+    setCurrentView('store');
+  };
+
   // Sync Cart to LocalStorage
   useEffect(() => {
     try {
@@ -275,7 +307,14 @@ function FreshCartApp() {
 
             <button
               className={`btn ${currentView === 'admin' ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setCurrentView('admin')}
+              onClick={() => {
+                if (currentUser?.role !== 'admin') {
+                  alert('🔒 Access Restricted: Store Manager (Admin) login required to manage warehouse inventory and CRUD operations.');
+                  setIsAuthModalOpen(true);
+                  return;
+                }
+                setCurrentView('admin');
+              }}
             >
               📦 Inventory & Orders
             </button>
@@ -301,6 +340,33 @@ function FreshCartApp() {
               <button className="btn btn-cart" onClick={() => setIsCartOpen(true)}>
                 🛒 Cart
                 {cartItemCount > 0 && <span className="cart-count">{cartItemCount}</span>}
+              </button>
+            )}
+
+            {/* User Profile Badge / Login Trigger */}
+            {currentUser ? (
+              <div
+                className="user-profile-badge"
+                title="Click to switch account"
+                onClick={() => setIsAuthModalOpen(true)}
+                style={{ cursor: 'pointer' }}
+              >
+                <span>{currentUser.role === 'admin' ? '🛡️' : '👤'} {currentUser.name}</span>
+                <span className={`user-role-tag ${currentUser.role === 'admin' ? 'user-role-admin' : 'user-role-customer'}`}>
+                  {currentUser.role === 'admin' ? 'Admin' : 'Customer'}
+                </span>
+                <button
+                  className="btn btn-outline"
+                  style={{ padding: '0.2rem 0.45rem', fontSize: '0.75rem', marginLeft: '4px' }}
+                  onClick={(e) => { e.stopPropagation(); handleLogout(); }}
+                  title="Logout"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button className="btn btn-primary" onClick={() => setIsAuthModalOpen(true)}>
+                🔑 Login
               </button>
             )}
           </div>
@@ -796,6 +862,15 @@ function FreshCartApp() {
           onSave={handleSaveProduct}
         />
       )}
+
+      {/* Login / Authentication Modal (Shown at Start) */}
+      {isAuthModalOpen && (
+        <AuthModal
+          currentUser={currentUser}
+          onClose={() => currentUser && setIsAuthModalOpen(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      )}
     </div>
   );
 }
@@ -1060,6 +1135,214 @@ function ProductModal({ mode, initialData, onClose, onSave }) {
             {mode === 'edit' ? 'Save Changes' : 'Add Item to Catalog'}
           </button>
         </form>
+      </div>
+    </div>
+  );
+}
+
+// Authentication & Login Modal Component
+function AuthModal({ currentUser, onClose, onLoginSuccess }) {
+  const [tab, setTab] = useState('customer'); // 'customer' | 'admin' | 'register'
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // 1-Click Fast Login Helper for Lab Demos
+  const handleQuickDemoLogin = (role) => {
+    if (role === 'admin') {
+      onLoginSuccess({
+        id: 'usr_admin',
+        name: 'Store Manager',
+        email: 'admin@freshcart.com',
+        role: 'admin',
+        college: 'RVCE CSE Dept'
+      }, 'demo_token_admin_2026');
+    } else {
+      onLoginSuccess({
+        id: 'usr_yashas',
+        name: 'Yashas',
+        email: 'yashas@rvce.edu.in',
+        role: 'customer',
+        college: 'RVCE CSE Dept'
+      }, 'demo_token_customer_2026');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      if (tab === 'register') {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, phone, role: 'customer' })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Registration failed');
+        onLoginSuccess(data.user, data.token);
+      } else {
+        // Admin or Customer Login
+        const targetEmail = tab === 'admin' && !email ? 'admin@freshcart.com' : email;
+        const targetPassword = tab === 'admin' && !password ? 'admin123' : password;
+
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: targetEmail, password: targetPassword })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Invalid email or password');
+        onLoginSuccess(data.user, data.token);
+      }
+    } catch (err) {
+      setError(err.message || 'Authentication failed. Please verify credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="auth-portal-overlay" onClick={onClose}>
+      <div className="auth-card" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="auth-header">
+          <h2>🥬 FreshCart Login</h2>
+          <p>RVCE CSE Department • Second Year Skill Lab Capstone</p>
+        </div>
+
+        <div className="auth-body">
+          {/* 1-Click Fast Login for Lab Evaluation / Viva */}
+          <div className="demo-login-box">
+            <h4>⚡ 1-Click Instant Demo Login</h4>
+            <div className="demo-buttons">
+              <button
+                type="button"
+                className="btn-demo"
+                onClick={() => handleQuickDemoLogin('customer')}
+              >
+                👤 Yashas (Customer)
+              </button>
+              <button
+                type="button"
+                className="btn-demo"
+                onClick={() => handleQuickDemoLogin('admin')}
+              >
+                🛡️ Store Manager (Admin)
+              </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="auth-tabs">
+            <button
+              type="button"
+              className={`auth-tab ${tab === 'customer' ? 'active' : ''}`}
+              onClick={() => { setTab('customer'); setEmail(''); setPassword(''); setError(''); }}
+            >
+              Customer Login
+            </button>
+            <button
+              type="button"
+              className={`auth-tab ${tab === 'admin' ? 'active' : ''}`}
+              onClick={() => { setTab('admin'); setEmail('admin@freshcart.com'); setPassword('admin123'); setError(''); }}
+            >
+              Admin Login
+            </button>
+            <button
+              type="button"
+              className={`auth-tab ${tab === 'register' ? 'active' : ''}`}
+              onClick={() => { setTab('register'); setError(''); }}
+            >
+              New Sign Up
+            </button>
+          </div>
+
+          {error && (
+            <div style={{ backgroundColor: '#fee2e2', color: '#b91c1c', padding: '0.6rem 0.8rem', borderRadius: '6px', fontSize: '0.85rem', marginBottom: '1rem' }}>
+              ⚠️ {error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {tab === 'register' && (
+              <>
+                <div className="form-group">
+                  <label className="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    required
+                    placeholder="e.g. Yashas"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    className="form-input"
+                    required
+                    placeholder="9876543210"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
+
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                className="form-input"
+                required
+                placeholder={tab === 'admin' ? 'admin@freshcart.com' : 'yashas@rvce.edu.in'}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-input"
+                required
+                placeholder="••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+              style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', fontSize: '0.95rem' }}
+            >
+              {loading ? 'Authenticating...' : tab === 'register' ? 'Create Account & Enter' : tab === 'admin' ? 'Login as Store Manager' : 'Login as Customer'}
+            </button>
+
+            {currentUser && (
+              <button
+                type="button"
+                className="btn btn-outline"
+                style={{ width: '100%', marginTop: '0.5rem', padding: '0.5rem', fontSize: '0.85rem' }}
+                onClick={onClose}
+              >
+                Cancel / Return to Store
+              </button>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@
       "category": "Fruits & Vegetables",
       "price": 40,
       "discountPrice": 32,
-      "stockQuantity": 69,
+      "stockQuantity": 56,
       "unit": "1 kg",
       "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&auto=format&fit=crop&q=60",
       "description": "Locally harvested, plump, and juicy red tomatoes rich in Lycopene and Vitamin C.",
@@ -58,7 +58,7 @@
       "category": "Fruits & Vegetables",
       "price": 450,
       "discountPrice": 380,
-      "stockQuantity": 8,
+      "stockQuantity": 7,
       "unit": "1 box (6 pcs)",
       "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=500&auto=format&fit=crop&q=60",
       "description": "Ratnagiri GI-tagged Alphonso mangoes, unmatched aroma and sweet saffron pulp.",
@@ -214,7 +214,7 @@
       "category": "Snacks & Drinks",
       "price": 380,
       "discountPrice": 320,
-      "stockQuantity": 16,
+      "stockQuantity": 15,
       "unit": "250 g Pack",
       "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&auto=format&fit=crop&q=60",
       "description": "Single-origin Chikmagalur estate beans with chocolate and hazelnut notes.",
@@ -227,7 +227,7 @@
       "category": "Snacks & Drinks",
       "price": 220,
       "discountPrice": 180,
-      "stockQuantity": 14,
+      "stockQuantity": 13,
       "unit": "100 g Tin",
       "image": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60",
       "description": "Whole loose leaf green tea blended with cardamom, cinnamon, and saffron strands.",
@@ -315,46 +315,116 @@
   ],
   "orders": [
     {
-      "id": "ord_1793164455736",
-      "orderNumber": "FC-325660",
+      "id": "ord_1793167104795",
+      "orderNumber": "FC-118616",
       "customer": {
-        "name": "Yashas Test Customer",
+        "name": "Yashas",
         "phone": "9876543210",
-        "email": "yashas@rvce.edu.in",
         "address": {
-          "street": "RVCE Campus, Mysuru Road",
+          "street": "RV College of Engineering, Mysuru Road",
           "city": "Bengaluru",
           "pincode": "560059"
-        }
+        },
+        "paymentMethod": "COD"
       },
       "items": [
         {
           "productId": "prod_001",
           "name": "Farm Fresh Red Tomatoes",
           "price": 32,
-          "quantity": 3,
+          "quantity": 1,
           "unit": "1 kg",
           "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&auto=format&fit=crop&q=60"
         }
       ],
-      "subtotal": 96,
+      "subtotal": 32,
       "deliveryFee": 40,
-      "totalAmount": 136,
-      "paymentMethod": "UPI",
+      "totalAmount": 72,
+      "paymentMethod": "COD",
       "paymentStatus": "Completed",
-      "orderStatus": "Out for Delivery",
-      "deliveryOtp": "8606",
-      "createdAt": "2026-10-28T05:14:15.736Z",
+      "orderStatus": "Delivered",
+      "deliveryOtp": "3084",
+      "createdAt": "2026-10-28T05:58:24.795Z",
       "timeline": [
         {
           "status": "Placed",
-          "timestamp": "2026-10-28T05:14:15.736Z",
+          "timestamp": "2026-10-28T05:58:24.795Z",
           "note": "Order placed. Estimated delivery in 20-30 minutes."
         },
         {
-          "status": "Out for Delivery",
-          "timestamp": "2026-10-28T05:14:15.775Z",
-          "note": "Rider Ramesh out on electric scooter"
+          "status": "Delivered",
+          "timestamp": "2026-10-28T05:58:27.143Z",
+          "note": "Order transitioned to Delivered"
+        }
+      ]
+    },
+    {
+      "id": "ord_1793165584180",
+      "orderNumber": "FC-562030",
+      "customer": {
+        "name": "Yashas",
+        "phone": "9876543210",
+        "address": {
+          "street": "RV College of Engineering, Mysuru Road",
+          "city": "Bengaluru",
+          "pincode": "560059"
+        },
+        "paymentMethod": "COD"
+      },
+      "items": [
+        {
+          "productId": "prod_005",
+          "name": "Fresh Alphonso Mangoes",
+          "price": 380,
+          "quantity": 1,
+          "unit": "1 box (6 pcs)",
+          "image": "https://images.unsplash.com/photo-1553279768-865429fa0078?w=500&auto=format&fit=crop&q=60"
+        },
+        {
+          "productId": "prod_017",
+          "name": "Dark Roast Arabica Coffee Beans",
+          "price": 320,
+          "quantity": 1,
+          "unit": "250 g Pack",
+          "image": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&auto=format&fit=crop&q=60"
+        },
+        {
+          "productId": "prod_018",
+          "name": "Pure Kashmiri Green Tea",
+          "price": 180,
+          "quantity": 1,
+          "unit": "100 g Tin",
+          "image": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&auto=format&fit=crop&q=60"
+        }
+      ],
+      "subtotal": 880,
+      "deliveryFee": 0,
+      "totalAmount": 880,
+      "paymentMethod": "COD",
+      "paymentStatus": "Completed",
+      "orderStatus": "Delivered",
+      "deliveryOtp": "3414",
+      "createdAt": "2026-10-28T05:33:04.180Z",
+      "timeline": [
+        {
+          "status": "Placed",
+          "timestamp": "2026-10-28T05:33:04.180Z",
+          "note": "Order placed. Estimated delivery in 20-30 minutes."
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-10-28T05:33:16.205Z",
+          "note": "Order transitioned to Delivered"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-10-28T05:33:17.988Z",
+          "note": "Order transitioned to Delivered"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-10-28T05:33:18.219Z",
+          "note": "Order transitioned to Delivered"
         }
       ]
     },
@@ -408,7 +478,17 @@
       ]
     }
   ],
-  "users": [],
+  "users": [
+    {
+      "id": "usr_1793167088944",
+      "name": "prakyath",
+      "email": "prakyah@bondu.in",
+      "password": "hshsh",
+      "phone": "8203932919",
+      "role": "customer",
+      "createdAt": "2026-10-28T05:58:08.944Z"
+    }
+  ],
   "categories": [
     {
       "id": "cat_1",

@@ -10,6 +10,25 @@
 const fs = require('fs');
 const path = require('path');
 
+// Simple native .env loader so environment variables are loaded with zero external dependencies
+try {
+  const envPath = path.join(__dirname, '..', '..', '.env');
+  if (fs.existsSync(envPath)) {
+    const envLines = fs.readFileSync(envPath, 'utf8').split('\n');
+    for (const line of envLines) {
+      const match = line.match(/^\s*([\w_]+)\s*=\s*(.*)?\s*$/);
+      if (match && !match[1].startsWith('#')) {
+        const key = match[1];
+        let val = (match[2] || '').trim();
+        if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+          val = val.slice(1, -1);
+        }
+        process.env[key] = val;
+      }
+    }
+  }
+} catch (e) {}
+
 let mongoose = null;
 try {
   mongoose = require('mongoose');
