@@ -2,7 +2,7 @@
 title Push FreshCart to GitHub (PSYASHAS)
 echo ========================================================
 echo   Pushing FreshCart Repository to GitHub
-echo   Target: https://github.com/PSYASHAS/freshcart-grocery-mern.git
+echo   Target: https://github.com/PSYASHAS/grocerydelivweb.git
 echo ========================================================
 echo.
 
