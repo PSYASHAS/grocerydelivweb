@@ -1,6 +1,6 @@
 /**
  * FreshCart - Auth Routes
- * Day 3: User Authentication REST endpoints
+ * User Authentication REST endpoints
  */
 
 const express = require('express');

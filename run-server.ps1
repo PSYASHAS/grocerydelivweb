@@ -5,8 +5,8 @@ if (Test-Path "$nodeDir\node.exe") {
 }
 
 Write-Host "========================================================" -ForegroundColor Green
-Write-Host "  FreshCart Full-Stack Grocery Delivery (MERN Capstone)" -ForegroundColor Cyan
-Write-Host "  RVCE CSE Department - Second Year Skill Lab" -ForegroundColor Yellow
+Write-Host "  FreshCart Full-Stack Grocery Delivery Platform" -ForegroundColor Cyan
+Write-Host "  Production-Ready MERN Architecture" -ForegroundColor Yellow
 Write-Host "========================================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Node Version: $(node -v)" -ForegroundColor Gray

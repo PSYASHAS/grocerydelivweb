@@ -1,6 +1,6 @@
 /**
  * FreshCart - Product Controller
- * Day 3: Node.js, Express, REST API
+ * Product Catalog, Filtering & CRUD Operations
  */
 
 const { isMongo, store } = require('../config/db');

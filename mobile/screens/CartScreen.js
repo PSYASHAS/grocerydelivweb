@@ -25,7 +25,7 @@ export default function CartScreen({
 }) {
   const [name, setName] = useState('Yashas');
   const [phone, setPhone] = useState('9876543210');
-  const [address, setAddress] = useState('RVCE Campus, Mysuru Road, Bengaluru');
+  const [address, setAddress] = useState('100 Feet Road, Indiranagar, Bengaluru');
   const [paymentMode, setPaymentMode] = useState('COD');
   const [submitting, setSubmitting] = useState(false);
 

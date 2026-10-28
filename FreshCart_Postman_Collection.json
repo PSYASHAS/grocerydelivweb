@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "a9182374-9c8f-4d32-8491-freshcart001",
     "name": "FreshCart Grocery Delivery REST API",
-    "description": "Postman API Collection for RVCE CSE Skill Lab - Day 3 REST API & Day 5 Capstone",
+    "description": "Postman API Collection for FreshCart Full-Stack Grocery Delivery Platform",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -124,7 +124,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"customer\": {\n    \"name\": \"Yashas\",\n    \"phone\": \"9876543210\",\n    \"email\": \"yashas@rvce.edu.in\",\n    \"address\": {\n      \"street\": \"RVCE Campus, Mysuru Road\",\n      \"city\": \"Bengaluru\",\n      \"pincode\": \"560059\"\n    }\n  },\n  \"paymentMethod\": \"UPI\",\n  \"items\": [\n    {\n      \"productId\": \"prod_001\",\n      \"name\": \"Farm Fresh Red Tomatoes\",\n      \"quantity\": 2\n    },\n    {\n      \"productId\": \"prod_006\",\n      \"name\": \"Amul Taaza Fresh Toned Milk\",\n      \"quantity\": 1\n    }\n  ]\n}"
+              "raw": "{\n  \"customer\": {\n    \"name\": \"Rohan Sharma\",\n    \"phone\": \"9876543210\",\n    \"email\": \"rohan@freshcart.com\",\n    \"address\": {\n      \"street\": \"Indiranagar 100ft Road\",\n      \"city\": \"Bengaluru\",\n      \"pincode\": \"560038\"\n    }\n  },\n  \"paymentMethod\": \"UPI\",\n  \"items\": [\n    {\n      \"productId\": \"prod_001\",\n      \"name\": \"Farm Fresh Red Tomatoes\",\n      \"quantity\": 2\n    },\n    {\n      \"productId\": \"prod_006\",\n      \"name\": \"Amul Taaza Fresh Toned Milk\",\n      \"quantity\": 1\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/orders",
@@ -201,7 +201,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Student Demo\",\n  \"email\": \"student@rvce.edu.in\",\n  \"password\": \"pass123\",\n  \"phone\": \"9876543210\"\n}"
+              "raw": "{\n  \"name\": \"Alex Customer\",\n  \"email\": \"alex@freshcart.com\",\n  \"password\": \"pass123\",\n  \"phone\": \"9876543210\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/register",

@@ -1,7 +1,6 @@
 /**
  * FreshCart - React Frontend Application
- * Day 2: JavaScript, DOM, JSON, APIs
- * Day 5: Full-Stack Capstone Development, Interactive UI & Testing
+ * Production Hyperlocal Grocery Delivery Platform
  */
 
 const { useState, useEffect, useMemo } = React;
@@ -296,7 +295,7 @@ function FreshCartApp() {
         <div className="container nav-content">
           <div className="logo-brand" onClick={() => setCurrentView('store')}>
             <span>🥬 FreshCart</span>
-            <span className="badge">RVCE CSE</span>
+            <span className="badge">Instant 15m</span>
             <a
               href="/api/health"
               target="_blank"
@@ -936,9 +935,9 @@ function FreshCartApp() {
 function CheckoutModal({ currentUser, onClose, onSubmit, totalAmount }) {
   const [name, setName] = useState(currentUser?.name || '');
   const [phone, setPhone] = useState(currentUser?.phone || '');
-  const [street, setStreet] = useState('RV College of Engineering, Mysuru Road');
+  const [street, setStreet] = useState('100 Feet Road, Indiranagar');
   const [city, setCity] = useState('Bengaluru');
-  const [pincode, setPincode] = useState('560059');
+  const [pincode, setPincode] = useState('560038');
   const [paymentMethod, setPaymentMethod] = useState('COD');
 
   useEffect(() => {
@@ -1215,23 +1214,21 @@ function AuthModal({ currentUser, onClose, onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // 1-Click Fast Login Helper for Lab Demos
+  // 1-Click Fast Login Helper
   const handleQuickDemoLogin = (role) => {
     if (role === 'admin') {
       onLoginSuccess({
         id: 'usr_admin',
         name: 'Store Manager',
         email: 'admin@freshcart.com',
-        role: 'admin',
-        college: 'RVCE CSE Dept'
+        role: 'admin'
       }, 'demo_token_admin_2026');
     } else {
       onLoginSuccess({
         id: 'usr_yashas',
         name: 'Yashas',
-        email: 'yashas@rvce.edu.in',
-        role: 'customer',
-        college: 'RVCE CSE Dept'
+        email: 'yashas@freshcart.com',
+        role: 'customer'
       }, 'demo_token_customer_2026');
     }
   };
@@ -1278,11 +1275,11 @@ function AuthModal({ currentUser, onClose, onLoginSuccess }) {
         {/* Header */}
         <div className="auth-header">
           <h2>🥬 FreshCart Login</h2>
-          <p>RVCE CSE Department • Second Year Skill Lab Capstone</p>
+          <p>Fast, Fresh & Hyperlocal 15-Minute Grocery Delivery</p>
         </div>
 
         <div className="auth-body">
-          {/* 1-Click Fast Login for Lab Evaluation / Viva */}
+          {/* 1-Click Fast Login */}
           <div className="demo-login-box">
             <h4>⚡ 1-Click Instant Demo Login</h4>
             <div className="demo-buttons">
@@ -1369,7 +1366,7 @@ function AuthModal({ currentUser, onClose, onLoginSuccess }) {
                 type="email"
                 className="form-input"
                 required
-                placeholder={tab === 'admin' ? 'admin@freshcart.com' : 'yashas@rvce.edu.in'}
+                placeholder={tab === 'admin' ? 'admin@freshcart.com' : 'customer@freshcart.com'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />

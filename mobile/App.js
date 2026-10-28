@@ -1,6 +1,6 @@
 /**
  * FreshCart Mobile - React Native Application Root
- * RVCE CSE Skill Lab Capstone Project
+ * Cross-Platform Hyperlocal Grocery Delivery App
  */
 
 import React, { useState } from 'react';

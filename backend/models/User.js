@@ -1,6 +1,6 @@
 /**
  * FreshCart - User Schema & Model
- * Day 4: MongoDB Schema Design & Validation
+ * MongoDB Schema Design & Validation
  */
 
 let mongoose;

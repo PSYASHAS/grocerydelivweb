@@ -1,6 +1,6 @@
 /**
  * FreshCart - Grocery Delivery Full Stack Backend
- * RVCE CSE Department - Second Year Skill Lab Capstone
+ * Production MERN Stack Architecture
  * 
  * Supports both Express.js and zero-dependency native Node.js HTTP fallback.
  */
@@ -108,7 +108,7 @@ try {
   <div class="card">
     <span class="badge-live"><span class="dot"></span> ${payload.database} (Port 27017)</span>
     <h1>🥬 FreshCart System Health</h1>
-    <p class="sub">RVCE CSE Skill Lab Capstone — Full Stack MERN Platform</p>
+    <p class="sub">High-Performance Hyperlocal Grocery Delivery Platform (MERN)</p>
 
     <div class="metric-grid">
       <div class="metric">
@@ -314,7 +314,7 @@ const startServer = async () => {
     console.log(`
 ==================================================================
 🥦 FreshCart Grocery Delivery Full-Stack System Active!
-🎓 Lab Track: RVCE CSE Skill Lab Capstone (MERN Stack)
+🚀 Architecture: Full Stack MERN (MongoDB + Express + React + Node.js)
 🌐 Web Storefront: http://localhost:${PORT}
 ⚡ REST API Base:  http://localhost:${PORT}/api/products
 📦 Inventory API:  http://localhost:${PORT}/api/inventory/stats

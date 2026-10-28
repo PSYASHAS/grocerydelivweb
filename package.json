@@ -1,7 +1,7 @@
 {
   "name": "freshcart-grocery-delivery",
   "version": "1.0.0",
-  "description": "Full-Stack MERN Grocery Delivery Web & Mobile Application with Inventory Management - RVCE Skill Lab Capstone",
+  "description": "Full-Stack MERN Grocery Delivery Web & Mobile Application with Inventory Management",
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
@@ -18,10 +18,9 @@
     "react-native",
     "node",
     "express",
-    "mongodb",
-    "rvce-skill-lab"
+    "mongodb"
   ],
-  "author": "Yashas - RVCE CSE",
+  "author": "Yashas",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

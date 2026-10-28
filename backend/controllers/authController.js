@@ -1,6 +1,6 @@
 /**
  * FreshCart - Auth Controller
- * Day 3: Node.js, Express, REST API
+ * User Authentication & Session Management
  */
 
 const { isMongo, store } = require('../config/db');
@@ -149,10 +149,9 @@ exports.getMe = async (req, res) => {
     success: true,
     user: {
       id: 'usr_demo',
-      name: 'Yashas (Student Developer)',
-      email: 'yashas@rvce.edu.in',
-      role: 'customer',
-      college: 'RVCE - CSE Department'
+      name: 'Yashas',
+      email: 'yashas@freshcart.com',
+      role: 'customer'
     }
   });
 };

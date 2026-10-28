@@ -6,7 +6,7 @@
       "category": "Fruits & Vegetables",
       "price": 40,
       "discountPrice": 32,
-      "stockQuantity": 56,
+      "stockQuantity": 68,
       "unit": "1 kg",
       "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&auto=format&fit=crop&q=60",
       "description": "Locally harvested, plump, and juicy red tomatoes rich in Lycopene and Vitamin C.",
@@ -315,6 +315,50 @@
   ],
   "orders": [
     {
+      "id": "ord_1793171016659",
+      "orderNumber": "FC-249405",
+      "customer": {
+        "name": "Yashas Test Customer",
+        "phone": "9876543210",
+        "email": "yashas@freshcart.com",
+        "address": {
+          "street": "100 Feet Road, Indiranagar",
+          "city": "Bengaluru",
+          "pincode": "560038"
+        }
+      },
+      "items": [
+        {
+          "productId": "prod_001",
+          "name": "Farm Fresh Red Tomatoes",
+          "price": 32,
+          "quantity": 3,
+          "unit": "1 kg",
+          "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&auto=format&fit=crop&q=60"
+        }
+      ],
+      "subtotal": 96,
+      "deliveryFee": 40,
+      "totalAmount": 136,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Completed",
+      "orderStatus": "Out for Delivery",
+      "deliveryOtp": "4272",
+      "createdAt": "2026-10-28T07:03:36.659Z",
+      "timeline": [
+        {
+          "status": "Placed",
+          "timestamp": "2026-10-28T07:03:36.659Z",
+          "note": "Order placed. Estimated delivery in 20-30 minutes."
+        },
+        {
+          "status": "Out for Delivery",
+          "timestamp": "2026-10-28T07:03:36.696Z",
+          "note": "Rider Ramesh out on electric scooter"
+        }
+      ]
+    },
+    {
       "id": "ord_1793167104795",
       "orderNumber": "FC-118616",
       "customer": {
@@ -434,11 +478,11 @@
       "customer": {
         "name": "Yashas Test Customer",
         "phone": "9876543210",
-        "email": "yashas@rvce.edu.in",
+        "email": "yashas@freshcart.com",
         "address": {
-          "street": "RVCE Campus, Mysuru Road",
+          "street": "100 Feet Road, Indiranagar",
           "city": "Bengaluru",
-          "pincode": "560059"
+          "pincode": "560038"
         }
       },
       "items": [

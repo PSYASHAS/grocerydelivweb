@@ -1,6 +1,6 @@
 /**
  * FreshCart - Automated API & Integration Test Suite
- * Day 5: Testing and Demo
+ * End-to-End API and Integration Tests
  * 
  * In-process unit & integration test runner testing controllers, inventory,
  * and order state transitions without requiring external network ports.
@@ -45,13 +45,12 @@ function createMockRes() {
 async function runTests() {
   console.log('====================================================');
   console.log('🧪 Running FreshCart MERN Grocery Delivery Test Suite');
-  console.log('🎓 RVCE CSE Department - Second Year Skill Lab Capstone');
   console.log('====================================================\n');
 
   try {
     await connectDB();
 
-    // Suite 1: Product Catalog & Filtering (Day 3 REST API)
+    // Suite 1: Product Catalog & Filtering (REST API)
     console.log('[Suite 1: Product Catalog & Search Filtering]');
     
     // Test 1.1: Fetch all products
@@ -101,7 +100,7 @@ async function runTests() {
     await productController.deleteProduct({ params: { id: createdId } }, resDelete);
     assert(resDelete.statusCode === 200, 'CRUD [Delete]: DELETE /api/products/:id removes item from database');
 
-    // Suite 2: Inventory Warehouse Stats & Restocking (Day 3 & Day 4)
+    // Suite 2: Inventory Warehouse Stats & Restocking
     console.log('\n[Suite 2: Inventory Warehouse & Stock Monitoring]');
     
     const resStats = createMockRes();
@@ -123,7 +122,7 @@ async function runTests() {
       `Restocked product (+15 units): ${initialStock} -> ${resRestock.body.data.stockQuantity}`
     );
 
-    // Suite 3: Order Lifecycle & Atomic Stock Decrement (Day 3 & Day 4)
+    // Suite 3: Order Lifecycle & Atomic Stock Decrement
     console.log('\n[Suite 3: Order Placement & Inventory Deduction]');
     
     const stockBeforeOrder = resRestock.body.data.stockQuantity;
@@ -132,11 +131,11 @@ async function runTests() {
         customer: {
           name: 'Yashas Test Customer',
           phone: '9876543210',
-          email: 'yashas@rvce.edu.in',
+          email: 'yashas@freshcart.com',
           address: {
-            street: 'RVCE Campus, Mysuru Road',
+            street: '100 Feet Road, Indiranagar',
             city: 'Bengaluru',
-            pincode: '560059'
+            pincode: '560038'
           }
         },
         paymentMethod: 'UPI',
@@ -195,7 +194,7 @@ async function runTests() {
     // Summary
     console.log('\n====================================================');
     console.log(`📊 Test Results: ${passedTests}/${totalTests} Tests Passed (${Math.round((passedTests/totalTests)*100)}%)`);
-    console.log('🎉 All Capstone Requirements Verified Successfully!');
+    console.log('🎉 All Integration Requirements Verified Successfully!');
     console.log('====================================================\n');
 
     process.exit(passedTests === totalTests ? 0 : 1);

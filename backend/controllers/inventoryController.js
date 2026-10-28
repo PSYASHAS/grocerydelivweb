@@ -1,6 +1,5 @@
 /**
  * FreshCart - Inventory Management Controller
- * Day 3: Node.js, Express, REST API
  * Handles real-time grocery warehouse inventory, low-stock warnings, and restocking.
  */
 

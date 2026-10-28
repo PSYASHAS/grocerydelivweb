@@ -1,7 +1,6 @@
 /**
  * FreshCart - Order & Inventory Processing Controller
- * Day 3: Node.js, Express, REST API
- * Day 4: Database Operations & Transactional Integrity
+ * Database Operations & Transactional Integrity
  */
 
 const { isMongo, store } = require('../config/db');

@@ -1,8 +1,8 @@
 @echo off
 title FreshCart Grocery Delivery Server
 echo ========================================================
-echo   FreshCart Full-Stack Grocery Delivery (MERN Capstone)
-echo   RVCE CSE Department - Second Year Skill Lab
+echo   FreshCart Full-Stack Grocery Delivery Platform
+echo   Production-Ready MERN Architecture
 echo ========================================================
 echo.
 

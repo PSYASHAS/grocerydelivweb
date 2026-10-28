@@ -1,6 +1,6 @@
 /**
  * FreshCart - Order Routes
- * Day 3: Express Router & Order Processing
+ * Express Router & Order Processing
  */
 
 const express = require('express');

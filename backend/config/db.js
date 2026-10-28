@@ -1,10 +1,9 @@
 /**
  * FreshCart - Database Configuration
- * Day 4: MongoDB + Database Integration
+ * MongoDB & Document Integration
  * 
  * Supports both MongoDB (via Mongoose) and an automated persistent JSON document
- * fallback store if MongoDB daemon is not running locally. This ensures 100% demo
- * reliability during college hackathons and lab evaluations without crashing.
+ * fallback store if MongoDB daemon is not running locally.
  */
 
 const fs = require('fs');

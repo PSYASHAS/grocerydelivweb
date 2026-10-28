@@ -1,24 +1,42 @@
-# 🥦 FreshCart - Full-Stack MERN Grocery Delivery & Inventory Management Platform
+# 🥦 FreshCart - Full-Stack MERN Grocery Delivery Platform
 
-> **Second Year Skill Lab: Full Stack Development — Capstone Project (Hackathon)**  
-> **Department of Computer Science and Engineering — RV Institutions (RVCE)**  
-> **Curriculum Alignment**: Day 1 (HTML/CSS) ➔ Day 2 (JS/APIs) ➔ Day 3 (Node/Express/Postman) ➔ Day 4 (MongoDB) ➔ Day 5 (Git/Testing/Demo)
+[![Node.js](https://img.shields.io/badge/Node.js-v20+-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18-blue.svg)](https://react.dev/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-v4.4+-brightgreen.svg)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express-v4.19-lightgrey.svg)](https://expressjs.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> **FreshCart** is a modern, production-grade hyperlocal grocery delivery and warehouse inventory management platform built using the complete **MERN Stack** (MongoDB, Express.js, React, Node.js) with a companion **React Native** mobile application.
 
 ---
 
-## 🌟 Project Overview
+## 🌟 Key Features
 
-**FreshCart** is a modern, high-performance grocery delivery application built using the complete **MERN Stack** (MongoDB, Express.js, React, Node.js) paired with a companion **React Native** mobile application.
+### 🛒 Customer Storefront (Web & Mobile)
+- **Instant Search & Category Filtering**: Real-time debounced search and category badges across *Fruits & Vegetables*, *Dairy & Breakfast*, *Staples & Grains*, *Snacks & Drinks*, and *Household & Personal*.
+- **Dynamic Stock Status**: Automatic visual indicators (`In Stock`, `Only X Left!`, and `Out of Stock`) synchronized with warehouse levels.
+- **Interactive Shopping Basket**: Real-time quantity steppers (`+` / `-`), auto-calculated delivery fee (Free above ₹499), and threshold alerts.
+- **Checkout & Multi-Mode Payments**: Delivery address form supporting Cash on Delivery (COD), UPI (GPay / PhonePe), and Cards.
 
-It simulates a real-world hyper-local 15-minute quick-commerce workflow (similar to Blinkit / Zepto / Instamart), featuring:
-1. **Dynamic Customer Storefront**: Instant search, category filters, live stock status tags, and shopping basket.
-2. **Atomic Inventory Deduction**: Automatically decrements product stock on order placement; prevents overselling.
-3. **Warehouse & Inventory Dashboard**: Low-stock warnings (<10 units), out-of-stock tracking, warehouse valuation, and 1-click restocking.
-4. **Live Order Tracking**: 4-step animated status progression (`Placed` ➔ `Packing` ➔ `Out for Delivery` ➔ `Delivered`) with delivery OTP and partner assignment.
-5. **Multi-Platform Frontend**:
-   - Modern **React Web App** with built-in Smartphone Simulator Frame toggle.
-   - Dedicated **React Native** mobile application (`mobile/App.js`) for Android and iOS via Expo.
-6. **Dual Database Engine**: Connects to **MongoDB** (via Mongoose) when available, and automatically falls back to an embedded persistent JSON datastore (`backend/data/db.json`) for 100% crash-free lab demos without external database setup.
+### 🛵 Live Order Tracking & Dispatch
+- **Visual 4-Stage Progress Stepper**: Real-time order lifecycle tracking: `Placed` ➔ `Packing` ➔ `Out for Delivery` ➔ `Delivered`.
+- **Delivery Verification PIN**: Unique 4-digit OTP generated per order for secure delivery confirmation.
+- **Rider Allocation**: Displays delivery partner details and estimated time of arrival.
+
+### 📦 Warehouse Inventory & Admin Dashboard
+- **Atomic Stock Deduction**: Automatically decrements product inventory on checkout and prevents overselling.
+- **Live Warehouse KPIs**: High-level metrics tracking Total SKUs, Low Stock alerts (< 10 units), Out of Stock count, and total warehouse valuation in ₹ INR.
+- **1-Click Restocking**: Instant stock replenishment (`+15 units`) via dedicated REST endpoint.
+- **Full CRUD Management**: Create, Read, Update (edit price/stock), and Delete items directly in MongoDB.
+
+### 🔐 Authentication & Role-Based Access Control
+- **Startup Authentication Portal**: Greets users on launch with Customer Login, Store Manager (Admin) Login, and New Account Registration.
+- **1-Click Demo Profiles**: Quick-switch demo buttons for instant testing.
+- **Protected Routes**: Restricts warehouse inventory and CRUD management to authenticated Store Managers.
+
+### 📱 Cross-Platform Architecture
+- **Responsive Single-Page Web App**: Built with React 18, CSS Grid, Flexbox, and an interactive **Smartphone Simulator Frame** toggle directly in the browser.
+- **React Native Mobile App**: Standalone mobile application in `mobile/` compatible with Expo, Android, and iOS.
 
 ---
 
@@ -26,28 +44,28 @@ It simulates a real-world hyper-local 15-minute quick-commerce workflow (similar
 
 ```mermaid
 flowchart TD
-    subgraph FrontendClients["Client Applications"]
-        WebApp["React Web Storefront\n(Desktop + Responsive Mobile)"]
+    subgraph Clients["Client Layer"]
+        WebApp["React Web Application\n(Desktop + Responsive Mobile)"]
         MobileApp["React Native Mobile App\n(Expo / Android / iOS)"]
-        AdminDashboard["Warehouse Admin Dashboard\n(Inventory & Dispatch)"]
+        AdminDashboard["Warehouse Admin Portal\n(Inventory & Order Dispatch)"]
     end
 
-    subgraph BackendServices["Node.js / Express Server (Port 5000)"]
-        Router["REST API Router"]
-        AuthController["Auth Controller\n(JWT & Roles)"]
-        ProductController["Product Controller\n(Search & Filter)"]
-        OrderController["Order Controller\n(Stock Deduction & Tracking)"]
-        InventoryController["Inventory Controller\n(Alerts & Restocking)"]
+    subgraph BackendServices["Backend API Services (Node.js & Express)"]
+        Router["RESTful API Gateway"]
+        AuthController["Authentication Controller\n(JWT & Roles)"]
+        ProductController["Product Catalog Controller\n(Search, Filters, CRUD)"]
+        OrderController["Order Controller\n(Atomic Stock Deduction)"]
+        InventoryController["Inventory Controller\n(KPIs & Restocking)"]
     end
 
-    subgraph DataLayer["Database Storage Layer"]
-        MongoDB[("MongoDB Database\n(Mongoose Models)")]
-        FallbackStore[("Persistent JSON Datastore\n(Zero-dependency Fallback)")]
+    subgraph DatabaseLayer["Data Persistence Layer"]
+        MongoDB[("MongoDB Database\n(Port 27017 / Mongoose Models)")]
+        Storage["WiredTiger Storage Engine\n(BSON Documents)"]
     end
 
-    WebApp -->|HTTP / JSON| Router
-    MobileApp -->|HTTP / JSON| Router
-    AdminDashboard -->|HTTP / JSON| Router
+    WebApp -->|JSON / REST| Router
+    MobileApp -->|JSON / REST| Router
+    AdminDashboard -->|JSON / REST| Router
 
     Router --> AuthController
     Router --> ProductController
@@ -57,59 +75,48 @@ flowchart TD
     ProductController --> MongoDB
     OrderController --> MongoDB
     InventoryController --> MongoDB
-
-    MongoDB -.->|Auto-fallback if offline| FallbackStore
+    MongoDB --> Storage
 ```
-
----
-
-## 📋 Course Curriculum Alignment (Day 1 - Day 5)
-
-| Day | Topic | Skill Lab Practical | FreshCart Implementation |
-|---|---|---|---|
-| **Day 1** | Web Fundamentals, HTML, CSS, Responsive Design | Portfolio + Git basics | Semantic HTML5 structure, CSS Grid for products, Flexbox nav, custom CSS variables, media queries, mobile phone simulator frame. |
-| **Day 2** | JavaScript, DOM, JSON, APIs | Interactive Task Manager | ES6+ async/await, Fetch API client (`api.js`), React functional components, `localStorage` cart persistence, real-time search. |
-| **Day 3** | Node.js, Express, REST API | Student REST API + Postman | Express RESTful API server, modular MVC controllers/routes, complete `FreshCart_Postman_Collection.json`. |
-| **Day 4** | MongoDB + Database Integration | Full-stack Student Management App | Mongoose Schemas (`Product`, `Order`, `User`, `Category`), text indexes, validation, database seeder script (`seed.js`). |
-| **Day 5** | GitHub, Collaboration, Hackathon | Capstone Development, Testing & Demo | Git repository setup, 14/14 automated integration tests (`api.test.js`), React Web + React Native mobile apps, Capstone Viva cheat sheet. |
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend (Web)**: React 18, HTML5, CSS3 (Grid & Flexbox), FontAwesome / Plus Jakarta Sans.
+- **Frontend (Web)**: React 18, Semantic HTML5, Modern CSS3 (Grid & Flexbox), Plus Jakarta Sans typography.
 - **Frontend (Mobile)**: React Native, Expo, React Navigation, StyleSheet.
-- **Backend**: Node.js (v20+), Express.js (v4.19+), REST API architecture.
-- **Database**: MongoDB (v6.0+), Mongoose (v8.3+), with embedded resilient JSON fallback.
-- **Testing**: Node.js Test Suite (14 unit and integration test assertions).
-- **API Tooling**: Postman Collection (v2.1).
+- **Backend**: Node.js (v20+), Express.js (v4.19+), RESTful Architecture.
+- **Database**: MongoDB (v4.4+ / v7+ / Atlas Cloud), Mongoose ODM (v8.3+).
+- **Testing**: Node.js Automated Integration Test Suite (17 unit and integration assertions).
+- **API Documentation**: Postman Collection (v2.1).
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Directory Structure
 
 ```
 freshcart-grocery-mern/
-├── .env.example                     # Environment configuration reference
-├── .gitignore                       # Git ignore rules for node_modules, logs, .env
-├── package.json                     # Root dependencies and npm scripts
-├── README.md                        # Project documentation (this file)
-├── FreshCart_Postman_Collection.json# Complete Postman API collection
-├── run-server.bat                   # 1-click Windows Batch launch script
-├── run-server.ps1                   # 1-click Windows PowerShell launch script
+├── .env                             # Active environment configuration
+├── .gitignore                       # Git ignore specifications
+├── package.json                     # Project manifest and scripts
+├── README.md                        # Documentation
+├── FreshCart_Postman_Collection.json# Complete Postman REST API collection
+├── run-server.bat                   # 1-click server launch script
+├── run-server.ps1                   # PowerShell server launch script
+├── start-mongodb.bat                # 1-click local MongoDB daemon launcher
+├── open-mongo-shell.bat             # 1-click MongoDB shell client launcher
 │
 ├── backend/
 │   ├── config/
-│   │   └── db.js                    # MongoDB connection + resilient fallback store
+│   │   └── db.js                    # MongoDB connection configuration
 │   ├── controllers/
-│   │   ├── authController.js        # User auth, register, login
-│   │   ├── productController.js     # Catalog listing, search, category filters
-│   │   ├── orderController.js       # Atomic stock deduction, order placement, tracking
-│   │   └── inventoryController.js   # Stock monitoring, low-stock warnings, restock
+│   │   ├── authController.js        # Authentication & user profile handling
+│   │   ├── productController.js     # Catalog search, category filters, and CRUD
+│   │   ├── orderController.js       # Order creation, atomic stock deduction, tracking
+│   │   └── inventoryController.js   # Stock monitoring, alerts, and restocking
 │   ├── models/
 │   │   ├── Product.js               # Mongoose schema for grocery items
-│   │   ├── Order.js                 # Mongoose schema for customer orders & timeline
-│   │   ├── User.js                  # Mongoose schema for user accounts & roles
+│   │   ├── Order.js                 # Mongoose schema for orders & timeline
+│   │   ├── User.js                  # Mongoose schema for user accounts
 │   │   └── Category.js              # Mongoose schema for product categories
 │   ├── routes/
 │   │   ├── authRoutes.js
@@ -117,68 +124,67 @@ freshcart-grocery-mern/
 │   │   ├── orderRoutes.js
 │   │   └── inventoryRoutes.js
 │   ├── data/
-│   │   ├── sampleProducts.json      # 24 realistic grocery items with high-res images
-│   │   ├── seed.js                  # Database seeder script
-│   │   └── db.json                  # Persistent disk database file
+│   │   ├── sampleProducts.json      # Pre-loaded grocery catalog
+│   │   └── seed.js                  # Database seeder script
 │   ├── tests/
-│   │   └── api.test.js              # Automated integration test runner (14 tests)
-│   └── server.js                    # Full-stack server (Express + Native HTTP engine)
+│   │   └── api.test.js              # Automated integration test runner (17 tests)
+│   └── server.js                    # Express application entry point
 │
 ├── frontend/
-│   ├── index.html                   # Single Page App container
+│   ├── index.html                   # Web application entry point
 │   ├── css/
-│   │   └── styles.css               # Responsive design, CSS Grid, phone frame simulator
+│   │   └── styles.css               # Responsive styling and phone frame simulator
 │   └── js/
-│       ├── api.js                   # Asynchronous Fetch API REST client
+│       ├── api.js                   # Asynchronous Fetch REST client
 │       └── app.js                   # React components (Storefront, Cart, Admin, Tracker)
 │
 ├── mobile/                          # React Native Mobile Application
-│   ├── App.js                       # Mobile app entry point and navigation
+│   ├── App.js                       # Mobile application entry point
 │   ├── app.json                     # Expo configuration
 │   ├── package.json                 # Mobile dependencies
-│   ├── screens/
-│   │   ├── HomeScreen.js            # Mobile grocery catalog with search & filters
-│   │   ├── CartScreen.js            # Mobile checkout & delivery address form
-│   │   ├── OrderTrackingScreen.js   # Mobile 4-step delivery progress tracker
-│   │   └── InventoryScreen.js       # Mobile warehouse stock monitor & restock
-│   ├── components/
-│   │   └── ProductCard.js           # Native mobile product card
-│   └── README.md                    # Mobile run guide for Expo Go
+│   ├── screens/                     # HomeScreen, CartScreen, OrderTrackingScreen, InventoryScreen
+│   ├── components/                  # ProductCard native component
+│   └── README.md                    # Mobile setup & run instructions
 │
 └── docs/
-    ├── DAY_BY_DAY_MAPPING.md        # Syllabus mapping to RVCE CSE Skill Lab
-    └── VIVA_CHEAT_SHEET.md          # 20 most common professor viva questions & answers
+    └── ARCHITECTURE_AND_FAQ.md      # System architecture, design decisions & FAQ
 ```
 
 ---
 
 ## ⚡ Quick Start Guide
 
-### 1. Launch the Backend & Web Application
-Double-click `run-server.bat` or run in PowerShell:
+### 1. Start MongoDB
+Double-click `start-mongodb.bat` or run:
 ```powershell
-.\run-server.ps1
+.\start-mongodb.bat
 ```
-Or with standard Node.js:
-```bash
-node backend/server.js
+*(Starts the local MongoDB daemon on `127.0.0.1:27017`)*
+
+### 2. Start the Full-Stack Server
+Double-click `run-server.bat` or run:
+```powershell
+.\run-server.bat
 ```
-Open your browser and navigate to:
+*(Or in VS Code, press **`F5`**)*
+
+Open your browser to:  
 👉 **`http://localhost:5000`**
 
-### 2. Run Automated Tests
-Verify all 14 integration test assertions (catalog, search, stock deduction, order state transitions):
-```bash
+### 3. Open MongoDB Shell (Optional)
+To inspect the live database:
+```powershell
+.\open-mongo-shell.bat
+```
+
+### 4. Run Automated Test Suite
+```powershell
 node backend/tests/api.test.js
 ```
+*Output: All 17 automated integration assertions pass with 100% success.*
 
-### 3. Seed Fresh Database (Optional)
-```bash
-node backend/data/seed.js
-```
-
-### 4. Run React Native Mobile App
-```bash
+### 5. Run React Native Mobile App (Optional)
+```powershell
 cd mobile
 npm install
 npx expo start
@@ -191,25 +197,23 @@ Scan the QR code with **Expo Go** on Android or iOS.
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/health` | System health check and database connection status |
+| `GET` | `/api/health` | Health dashboard reporting active MongoDB connection |
 | `GET` | `/api/products` | Get products (supports `?category=...&search=...&sort=...`) |
 | `GET` | `/api/products/:id` | Get individual product details |
 | `POST` | `/api/products` | Create new grocery product (Admin) |
-| `PUT` | `/api/products/:id` | Update product details |
-| `DELETE` | `/api/products/:id` | Remove product |
+| `PUT` | `/api/products/:id` | Update product details / price (Admin) |
+| `DELETE` | `/api/products/:id` | Remove product from database (Admin) |
 | `GET` | `/api/inventory/stats` | Warehouse overview, low stock alerts, valuation |
-| `PATCH` | `/api/inventory/:id/restock` | Restock product stock quantity (`+10`, `+25` units) |
+| `PATCH` | `/api/inventory/:id/restock` | Restock product inventory count |
 | `GET` | `/api/orders` | View all customer orders (Admin) |
 | `POST` | `/api/orders` | Place grocery order (validates & decrements stock) |
 | `GET` | `/api/orders/:idOrNumber` | Live order tracking by ID or Order Number |
 | `PATCH` | `/api/orders/:id/status` | Transition order status (`Placed` ➔ `Packing` ➔ `Out for Delivery` ➔ `Delivered`) |
+| `DELETE` | `/api/orders/:id` | Remove order record (Admin) |
 | `POST` | `/api/auth/login` | User login (`admin@freshcart.com` / `admin123`) |
 | `POST` | `/api/auth/register` | Register new customer account |
 
 ---
 
-## 👥 Contributors & Acknowledgements
-- **Department**: Computer Science and Engineering, RVCE
-- **Laboratory**: Second Year Skill Lab - Full Stack Development (Oct 2026)
-- **Developer**: Yashas (RVCE CSE)
-- **License**: MIT
+## 📄 License
+This project is open-source under the [MIT License](LICENSE).

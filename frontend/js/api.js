@@ -1,6 +1,6 @@
 /**
  * FreshCart - API Client
- * Day 2: JavaScript, JSON, Asynchronous Fetch & REST APIs
+ * Asynchronous Fetch & REST APIs
  */
 
 const API_BASE = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')

@@ -1,6 +1,6 @@
 /**
  * FreshCart - Modern Responsive Grocery Delivery Stylesheet
- * Day 1: Web fundamentals, HTML5, CSS3, Responsive Design, Flexbox & CSS Grid
+ * Responsive Design, Flexbox & CSS Grid UI System
  */
 
 :root {
@@ -301,7 +301,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* Product Grid (CSS Grid - Day 1 Topic) */
+/* Product Grid (CSS Grid) */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

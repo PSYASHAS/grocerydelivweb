@@ -1,6 +1,6 @@
 /**
  * FreshCart - Database Seeder
- * Day 4: MongoDB Database Integration & Data Seeding
+ * MongoDB Database Integration & Data Seeding
  * 
  * Run with: npm run seed or node backend/data/seed.js
  */
@@ -48,8 +48,8 @@ const seedDatabase = async () => {
           phone: '9876543210'
         },
         {
-          name: 'Yashas (Student)',
-          email: 'yashas@rvce.edu.in',
+          name: 'Yashas',
+          email: 'yashas@freshcart.com',
           password: 'user123',
           role: 'customer',
           phone: '9988776655'
@@ -62,11 +62,11 @@ const seedDatabase = async () => {
         customer: {
           name: 'Yashas',
           phone: '9988776655',
-          email: 'yashas@rvce.edu.in',
+          email: 'yashas@freshcart.com',
           address: {
-            street: 'RVCE Campus, Mysuru Road',
+            street: '100 Feet Road, Indiranagar',
             city: 'Bengaluru',
-            pincode: '560059'
+            pincode: '560038'
           }
         },
         items: [
@@ -115,11 +115,11 @@ const seedDatabase = async () => {
         customer: {
           name: 'Yashas',
           phone: '9988776655',
-          email: 'yashas@rvce.edu.in',
+          email: 'yashas@freshcart.com',
           address: {
-            street: 'RVCE Campus, Mysuru Road',
+            street: '100 Feet Road, Indiranagar',
             city: 'Bengaluru',
-            pincode: '560059'
+            pincode: '560038'
           }
         },
         items: [
@@ -149,7 +149,7 @@ const seedDatabase = async () => {
         deliveryOtp: '4829',
         createdAt: new Date().toISOString(),
         timeline: [
-          { status: 'Placed', timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(), note: 'Order placed by student' },
+          { status: 'Placed', timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(), note: 'Order placed online' },
           { status: 'Packing', timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(), note: 'Grocery items being packed in crate' }
         ]
       }
@@ -165,7 +165,7 @@ const seedDatabase = async () => {
       {
         id: 'usr_demo',
         name: 'Yashas',
-        email: 'yashas@rvce.edu.in',
+        email: 'yashas@freshcart.com',
         password: 'user123',
         role: 'customer'
       }

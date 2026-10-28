@@ -1,6 +1,6 @@
 /**
  * FreshCart - Product Routes
- * Day 3: Express Router & REST endpoints
+ * Express Router & REST endpoints
  */
 
 const express = require('express');
