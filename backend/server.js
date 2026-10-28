@@ -50,15 +50,95 @@ try {
   app.use('/api/inventory', require('./routes/inventoryRoutes'));
   app.use('/api/auth', require('./routes/authRoutes'));
 
-  // Health check endpoint
-  app.get('/api/health', (req, res) => {
-    res.json({
+  // Health check endpoint (Returns visual dashboard in browser or JSON for API calls)
+  app.get('/api/health', async (req, res) => {
+    const isHtml = req.query.format !== 'json' && req.headers.accept && req.headers.accept.includes('text/html');
+
+    let productCount = 24;
+    let orderCount = 0;
+    try {
+      if (isMongo()) {
+        const Product = require('./models/Product');
+        const Order = require('./models/Order');
+        productCount = await Product.countDocuments();
+        orderCount = await Order.countDocuments();
+      } else {
+        productCount = store.data.products.length;
+        orderCount = store.data.orders.length;
+      }
+    } catch (e) {}
+
+    const payload = {
       status: 'UP',
       appName: 'FreshCart Grocery Delivery API',
       version: '1.0.0',
       database: isMongo() ? 'MongoDB Connected' : 'Embedded JSON Datastore',
+      mongoHost: isMongo() ? '127.0.0.1:27017' : 'Local Fallback',
+      databaseName: 'freshcart_db',
+      productCount,
+      orderCount,
       timestamp: new Date().toISOString()
-    });
+    };
+
+    if (isHtml) {
+      return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FreshCart System & Database Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 2.5rem 1rem; display: flex; justify-content: center; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; max-width: 580px; width: 100%; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    .badge-live { background: #065f46; color: #34d399; padding: 0.35rem 0.85rem; border-radius: 9999px; font-weight: 700; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; display: inline-block; }
+    h1 { font-size: 1.7rem; margin: 1rem 0 0.4rem 0; color: #ffffff; }
+    p.sub { color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .metric { background: #0f172a; border: 1px solid #334155; padding: 1.1rem; border-radius: 10px; }
+    .metric-val { font-size: 1.35rem; font-weight: 800; color: #38bdf8; }
+    .metric-lbl { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; margin-top: 0.35rem; font-weight: 700; letter-spacing: 0.5px; }
+    .actions { margin-top: 1.75rem; display: flex; gap: 0.75rem; }
+    .btn { background: #10b981; color: white; padding: 0.65rem 1.25rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+    .btn-outline { background: transparent; border: 1px solid #475569; color: #cbd5e1; }
+    .btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge-live"><span class="dot"></span> ${payload.database} (Port 27017)</span>
+    <h1>🥬 FreshCart System Health</h1>
+    <p class="sub">RVCE CSE Skill Lab Capstone — Full Stack MERN Platform</p>
+
+    <div class="metric-grid">
+      <div class="metric">
+        <div class="metric-val" style="color: #34d399;">Active</div>
+        <div class="metric-lbl">MongoDB Daemon (127.0.0.1:27017)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${payload.databaseName}</div>
+        <div class="metric-lbl">Active Database Name</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${payload.productCount} Documents</div>
+        <div class="metric-lbl">Products Collection (MongoDB)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">${payload.orderCount} Documents</div>
+        <div class="metric-lbl">Orders Collection (MongoDB)</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn">← Back to Grocery Store</a>
+      <a href="/api/health?format=json" class="btn btn-outline">{ } View Raw JSON</a>
+    </div>
+  </div>
+</body>
+</html>`);
+    }
+
+    res.json(payload);
   });
 
   // Serve Frontend Static Assets

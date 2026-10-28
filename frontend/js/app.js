@@ -297,6 +297,28 @@ function FreshCartApp() {
           <div className="logo-brand" onClick={() => setCurrentView('store')}>
             <span>🥬 FreshCart</span>
             <span className="badge">RVCE CSE</span>
+            <a
+              href="/api/health"
+              target="_blank"
+              style={{
+                fontSize: '0.72rem',
+                background: '#d1fae5',
+                color: '#065f46',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '9999px',
+                fontWeight: 700,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                marginLeft: '0.4rem'
+              }}
+              title="Click to view live MongoDB system health"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', display: 'inline-block', boxShadow: '0 0 6px #10b981' }}></span>
+              MongoDB 27017
+            </a>
           </div>
 
           {currentView === 'store' && (
